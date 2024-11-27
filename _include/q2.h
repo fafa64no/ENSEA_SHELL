@@ -2,7 +2,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 
 #define MAX_COMMAND_LENGTH 65536
 
-void readCommand(void);
+ssize_t readCommand(void);
