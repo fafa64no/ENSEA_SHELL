@@ -1,5 +1,5 @@
 #!/bin/bash
 
-incldues=""
+src="_src/main.c _src/q1.c _src/q2.c"
 
-gcc -g src/main.c -oENSEA_SHELL.exe $includes
+gcc -g $src -oENSEA_SHELL.exe
