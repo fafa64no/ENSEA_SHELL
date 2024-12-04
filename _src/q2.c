@@ -2,6 +2,7 @@
 
 
 static char commandBuffer[MAX_COMMAND_LENGTH];
+static char outBuffer[MAX_OUT_LENGTH];
 
 ssize_t readCommand(void){
     int pid, status;
@@ -11,21 +12,27 @@ ssize_t readCommand(void){
 
     commandBuffer[strlen(commandBuffer)-1]='\0';
 
-    if(!strncmp(commandBuffer,"exit",4)){
-        write(1,"Bye bye ...\n$\n",strlen("Bye bye ...\n$\n"));
+    if(!strncmp(commandBuffer,"exit",4) || ret==0){
+        write(STDOUT_FILENO,"Bye bye ...\n$\n",strlen("Bye bye ...\n$\n"));
         exit(EXIT_SUCCESS);
     }
 
     pid = fork();
+    int out, sig;
 
     if(pid != 0){
-        wait(&status);
+        waitpid(pid, &status, 0);
+        out = WEXITSTATUS(status);
+        sig = WIFSIGNALED(status);
+        sprintf(outBuffer,"[exit:%d]\n[sign:%d]\n",out,sig);
+        write(STDOUT_FILENO,outBuffer,strlen(outBuffer));
     } else {
-        ret = execlp(commandBuffer,commandBuffer,(char*)NULL);
-        write(1,"Not good. At all. Like really.\n",strlen("Not good. At all. Like really.\n"));
-        write(1,commandBuffer,strlen(commandBuffer));
+        execlp(commandBuffer,commandBuffer,(char*)NULL);
+        write(STDOUT_FILENO,"Command not found : ",strlen("Command not found : "));
+        write(STDOUT_FILENO,commandBuffer,strlen(commandBuffer));
+        write(STDOUT_FILENO,"\n",strlen("\n"));
         exit(EXIT_FAILURE);
     }
 
-    return ret;
+    return sig;
 }
