@@ -11,7 +11,7 @@ int main (int argc, char **argv ){
     welcomeMsg();
     while(1){
         defaultPromptMsg();
-        returnMsg = readCommand();
+        readCommandWithArg();
     }
 
     return EXIT_SUCCESS;
