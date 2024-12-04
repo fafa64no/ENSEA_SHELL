@@ -13,44 +13,29 @@ ssize_t readCommandWithArg(void){
     ret = read(0,commandBuffer,MAX_INPUT_LENGTH);
     commandBuffer[strlen(commandBuffer)-1]='\0';
     
-    if(!strncmp(commandBuffer,"exit",4) || ret==0){
-        write(STDOUT_FILENO,"Bye bye ...\n$\n",strlen("Bye bye ...\n$\n"));
-        exit(EXIT_SUCCESS);
-    }
+    checkExit(commandBuffer, ret);
 
-    int argc = 0;
-    char* tmpBuffer;
-    tmpBuffer = strtok(commandBuffer, " \n");
-
-    while (tmpBuffer != NULL) {
-        int argSize = (int)strlen(tmpBuffer);
-        argsBuffer[argc] = malloc(sizeof(char)*(argSize+1));
-        strncpy(argsBuffer[argc], tmpBuffer, argSize);
-        argsBuffer[argc][argSize] = '\0';
-        argc++;
-        tmpBuffer = strtok(NULL, " \n");
-    }
-    argsBuffer[argc] = (char*)NULL;
+    int argc = getArgsBuffer(commandBuffer, argsBuffer);
 
     struct timespec start, finish;
-    clock_gettime(CLOCK_REALTIME, &start);
-    pid = fork();
     int out, sig;
     float delta_ms;
 
+    clock_gettime(CLOCK_REALTIME, &start);
+
+    pid = fork();
+
     if(pid != 0){
         waitpid(pid, &status, 0);
+        
         clock_gettime(CLOCK_REALTIME, &finish);
-
         out = WEXITSTATUS(status);
         sig = WIFSIGNALED(status);
-
         delta_ms = (finish.tv_nsec - start.tv_nsec)/1000000.0f;
-
-        if (out) {
-            sprintf(outBuffer,"[exit:%d|%.1f ms]\n",out,delta_ms);
-        } else {
+        if (sig) {
             sprintf(outBuffer,"[sign:%d|%.1f ms]\n",sig,delta_ms);
+        } else {
+            sprintf(outBuffer,"[exit:%d|%.1f ms]\n",out,delta_ms);
         }
         
         write(STDOUT_FILENO,outBuffer,strlen(outBuffer));

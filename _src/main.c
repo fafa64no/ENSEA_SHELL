@@ -2,7 +2,7 @@
 
 #include "../_include/q1.h"
 #include "../_include/q2.h"
-#include "../_include/q6.h"
+#include "../_include/q7.h"
 
 char buffer[100]={0};
 
