@@ -1,18 +1,19 @@
-#include "../_include/q2.h"
+#include "../_include/q6.h"
 
 
+
+static char inputBuffer[MAX_INPUT_LENGTH];
 static char commandBuffer[MAX_COMMAND_LENGTH];
 static char outBuffer[MAX_OUT_LENGTH];
 
-ssize_t readCommand(void){
+ssize_t readCommandWithArg(void){
     int pid, status;
     ssize_t ret;
 
-    ret = read(0,commandBuffer,MAX_COMMAND_LENGTH);
+    ret = read(0,inputBuffer,MAX_INPUT_LENGTH);
+    commandBuffer[strlen(inputBuffer)-1]='\0';
 
-    commandBuffer[strlen(commandBuffer)-1]='\0';
-
-    if(!strncmp(commandBuffer,"exit",4) || ret==0){
+    if(!strncmp(inputBuffer,"exit",4) || ret==0){
         write(STDOUT_FILENO,"Bye bye ...\n$\n",strlen("Bye bye ...\n$\n"));
         exit(EXIT_SUCCESS);
     }
