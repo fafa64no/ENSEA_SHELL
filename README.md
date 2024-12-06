@@ -1,8 +1,13 @@
-*Création du micro shell ENSEA*
+# ENSEA_SHELL
 
-- La question 2 et 3 sont dans le même .c pour pouvoir exit le programme de la question 2 <bs>
-- Les questions jusqu'à la 6 ont été commit<bs>
-- Il y a toujours un problème de vidage de buffer pour la question 6<bs>
+## Context
 
+Basic shell made at ENSEA using C to learn system oriented programming.
 
-- Les fichiers de _data sont des fichiers de test qui sert à tout et rien à la fois.
+## Basic informations for the teacher
+
+- Q2 to Q5 are currently in the same file
+- The "_data" folder corresponds to random files we test commands on.
+- There has been a bug since Q6 : If a command isn't recognized, the command buffer won't be entirely emptied, and it will only empty a single char
+per command until it goes back to normal.
+
