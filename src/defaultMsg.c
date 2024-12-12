@@ -1,12 +1,12 @@
-#include "../_include/q1.h"
+#include "defaultMsg.h"
 
 static const char defaultPrompt[] = "enseash % ";
 static const char welcomeText[] = "$./enseash\nBienvenue dans le Shell ENSEA.\nPour quitter, tapez 'exit'.\n";
 
-void welcomeMsg(void){
+void welcomeMsg(){
     write(STDOUT_FILENO,welcomeText,strlen(welcomeText));
 }
 
-void defaultPromptMsg(void){
+void defaultPromptMsg(){
     write(STDOUT_FILENO,defaultPrompt,strlen(defaultPrompt));
 }

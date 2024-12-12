@@ -1,5 +1,20 @@
 #!/bin/bash
 
-src="_src/main.c _src/q1.c _src/q2.c _src/q7.c _src/utils.c"
+src="
+src/main.c
+src/defaultMsg.c
+src/commandReader.c
+src/redirection.c
+src/checkManyThings.c
+src/commandExec.c
+"
 
-gcc -g $src -oENSEA_SHELL.exe
+includes="
+-Iinclude 
+-Isrc
+"
+
+output="-oENSEA_SHELL.exe"
+args="-g"
+
+gcc $args $includes $src $output
